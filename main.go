@@ -35,6 +35,7 @@ func main() {
 	)
 	var spreadsheetId = os.Getenv("SHEET_ID")
 	const valueRange = "A:B"
+	var sheetName = os.Getenv("SHEET_NAME")
 	const valueInputOption = "USER_ENTERED"
 	const insertDataOption = "INSERT_ROWS"
 
@@ -91,17 +92,17 @@ func main() {
 					{now, s.Text},
 				},
 			}
-			resp, err := srv.Spreadsheets.Values.Append(spreadsheetId, valueRange, rb).
+			_, err = srv.Spreadsheets.Values.Append(spreadsheetId, sheetName+"!"+valueRange, rb).
 				ValueInputOption(valueInputOption).InsertDataOption(insertDataOption).Context(ctx).Do()
 			if err != nil {
 				log.Fatalf("Unable to retrieve data from sheet: %v", err)
-				log.Fatalf("%v", resp)
+				log.Fatalf("%v", err)
 			}
 		case "/logs":
 			valueRenderOption := "FORMATTED_VALUE"
 			dateTimeRenderOption := "FORMATTED_STRING"
 
-			resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, valueRange).ValueRenderOption(valueRenderOption).
+			resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, sheetName+"!"+valueRange).ValueRenderOption(valueRenderOption).
 				DateTimeRenderOption(dateTimeRenderOption).Context(ctx).Do()
 			if err != nil {
 				log.Fatal(err)
