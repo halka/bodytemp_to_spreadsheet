@@ -42,7 +42,7 @@ func main() {
 	flag.StringVar(&signingSecret, "secret", os.Getenv("SLACK_SIGNING_SECRET"), "Your Slack app's signing secret")
 	flag.Parse()
 
-	http.HandleFunc("/body_tp", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/body_tp/", func(w http.ResponseWriter, r *http.Request) {
 
 		verifier, err := slack.NewSecretsVerifier(r.Header, signingSecret)
 		if err != nil {
